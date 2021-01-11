@@ -94,27 +94,35 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateGroup) {
 
   var xLabel;
   var yLabel;
+  var xType;
+  var yType;
 
   switch(chosenXAxis) {
     case "income":
-      xLabel = "Income";
+      xLabel = "Income: $";
+      xType = "";
       break;
     case "age":
-      xLabel = "Age";
+      xLabel = "Age: ";
+      xType = "";
       break;
     default:
-      xLabel = "Poverty";
+      xLabel = "Poverty: ";
+      xType = "%";
   };
 
   switch(chosenYAxis) {
     case "obesity":
-      yLabel = "Obesity";
+      yLabel = "Obesity: ";
+      yType = "%";
       break;
     case "smokes":
-      yLabel = "Smokes";
+      yLabel = "Smokes: ";
+      yType = "%";
       break;
     default:
-      yLabel = "Healthcare";
+      yLabel = "Healthcare: ";
+      yType = "%";
   };
 
   var toolTip = d3.tip()
@@ -122,7 +130,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateGroup) {
     .offset([45, -75])
     .html("")
     .html(function(d) {
-      return (`${d.state}<br>${xLabel}: ${d[chosenXAxis]}%<br>${yLabel}: ${d[chosenYAxis]}%`);
+      return (`${d.state}<br>${xLabel}${d[chosenXAxis]}${xType}<br>${yLabel}${d[chosenYAxis]}${yType}`);
     });
 
     stateGroup.call(toolTip);
