@@ -224,7 +224,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   var incomeLabel = xLabelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 60)
-    .attr("value", "healthcare") // value to grab for event listener
+    .attr("value", "income") // value to grab for event listener
     .classed("inactive", true)
     .classed("aText", true)
     .text("Household Income (Median)");
@@ -254,7 +254,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   var obesityLabel = yLabelsGroup.append("text")
     .attr("x", 0)
     .attr("y", -60)
-    .attr("value", "healthcare") // value to grab for event listener
+    .attr("value", "obesity") // value to grab for event listener
     .classed("inactive", true)
     .classed("aText", true)
     .text("Obese (Median)");
