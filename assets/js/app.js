@@ -9,10 +9,10 @@ var margin = {
     left: 50
 };
 
-
 var height = svgHeight - margin.top - margin.bottom;
 var width = svgWidth - margin.left - margin.right;
 
+// Create an SVG wrapper, append an SVG group that will hold our chart,
 var svg = d3.select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
@@ -20,6 +20,58 @@ var svg = d3.select("#scatter")
 
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+// Initial Params
+var chosenXAxis = "poverty";
+var chosenYAxis = "healthcare";
+
+// function used for updating x-scale var upon click on axis label
+function xScale(censusData, chosenXAxis) {
+  // create scale
+  var xLinearScale = d3.scaleLinear()
+    .domain([d3.min(censusData, d => d[chosenXAxis]) * 0.8,
+      d3.max(censusData, d => d[chosenXAxis]) * 1.2
+    ])
+    .range([0, width]);
+
+  return xLinearScale;
+
+}
+
+function yScale(censusData, chosenYAxis) {
+  // create scale
+  yLinearScale = d3.scaleLinear()
+  var yLinearScale = d3.scaleLinear()
+    .domain([d3.min(censusData, d => d[chosenYAxis]) * 0.8,
+      d3.max(censusData, d => d[chosenYAxis]) * 1.2
+    ])
+    .range([height, 0]);
+
+  return yLinearScale;
+
+}
+
+// function used for updating xAxis var upon click on axis label
+function renderXAxis(newXScale, xAxis) {
+  var bottomAxis = d3.axisBottom(newXScale);
+
+  xAxis.transition()
+    .duration(1000)
+    .call(bottomAxis);
+
+  return xAxis;
+}
+
+// function used for updating circles group with a transition to
+// new circles
+function renderCircles(stateGroup, newXScale, chosenXAxis) {
+
+  stateGroup.transition()
+    .duration(1000)
+    .attr("cx", d => newXScale(d[chosenXAxis]));
+
+  return circlesGroup;
+}
 
 d3.csv("assets/data/data.csv").then(function(censusData) {
   console.log(censusData)
@@ -56,7 +108,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   console.log([censusData]);
 
   // Create element group for both circle and text
-  var circleTextGroup = chartGroup.selectAll('g')
+  var stateGroup = chartGroup.selectAll('g')
     .data(censusData)
     .enter()
     .append("g")
@@ -68,17 +120,36 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     });
 
   // Create Circles
-  circleTextGroup.append("circle")
+  stateGroup.append("circle")
     .classed("stateCircle", true)
     .attr("r", "15");
 
   // Add State abbreviations to circles
-  circleTextGroup.append("text")
+  stateGroup.append("text")
     .attr('text-anchor', 'middle')
     .attr('alignment-baseline', 'middle')
     .style('font-size', '15px')
     .attr("class", "stateText")
     .text(d => d.abbr);
+
+    var toolTip = d3.tip()
+    .attr("class", "tooltip")
+    .offset([80, -60])
+    .html(function(d) {
+      return (`${d.rockband}<br>Hair length: ${d.hair_length}<br>Hits: ${d.num_hits}`);
+    });
+
+  // Create tooltip in the chart
+  chartGroup.call(toolTip);
+
+  // Create event listeners to display and hide the tooltip
+  circlesGroup.on("click", function(data) {
+    toolTip.show(data, this);
+  })
+    // onmouseout event
+    .on("mouseout", function(data, index) {
+      toolTip.hide(data);
+    });
 
   // Create axes labels
   chartGroup.append("text")
