@@ -79,31 +79,38 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateGroup) {
   var xLabel;
   var yLabel;
 
-  if (chosenXAxis === "hair_length") {
-    label = "Hair Length:";
-  }
-  else {
-    label = "# of Albums:";
+  switch(chosenXAxis) {
+    case "income":
+      xLabel = "Income:";
+      break;
+    case "age":
+      xLabel = "Age:";
+      break;
+    default:
+      xLabel = "Poverty:";
   }
 
+  switch(chosenYAxis) {
+    case "obesity":
+      yLabel = "Obesity:";
+      break;
+    case "smokes":
+      yLabel = "Smokes:";
+      break;
+    default:
+      yLabel = "Healthcare:";
+  }
+  
   var toolTip = d3.tip()
-    .attr("class", "tooltip")
-    .offset([80, -60])
+    .attr("class", "d3-tip")
+    .offset([45, -75])
     .html(function(d) {
-      return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
+      return (`${d.state}<br>${xLabel} ${d[chosenXAxis]}%<br>${yLabel} ${d[chosenYAxis]}%`);
     });
 
-  circlesGroup.call(toolTip);
+    stateGroup.call(toolTip);
 
-  circlesGroup.on("mouseover", function(data) {
-    toolTip.show(data);
-  })
-    // onmouseout event
-    .on("mouseout", function(data, index) {
-      toolTip.hide(data);
-    });
-
-  return circlesGroup;
+  return stateGroup;
 }
 
 d3.csv("assets/data/data.csv").then(function(censusData) {
