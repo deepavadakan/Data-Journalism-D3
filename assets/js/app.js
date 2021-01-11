@@ -117,14 +117,22 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateGroup) {
       yLabel = "Healthcare";
   };
   
+  console.log(`${chosenXAxis}, ${chosenYAxis}`);
+  console.log(`${xLabel}, ${yLabel}`);
+
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
     .offset([45, -75])
+    .html("")
     .html(function(d) {
       return (`${d.state}<br>${xLabel}: ${d[chosenXAxis]}%<br>${yLabel}: ${d[chosenYAxis]}%`);
     });
 
     stateGroup.call(toolTip);
+
+    stateGroup
+      .on('mouseover', toolTip.show)
+      .on('mouseout', toolTip.hide);
 
   return stateGroup;
 }
@@ -163,17 +171,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
   console.log([censusData]);
 
-  // Setup the tool tip.  
-  var toolTip = d3.tip()
-    .attr("class", "d3-tip")
-    .offset([45, -75])
-    .html(function(d) {
-      return (`${d.state}<br>${xLabel}: ${d[chosenXAxis]}%<br>${yLabel}: ${d[chosenYAxis]}}%`);
-    });
-
-  // Create tooltip in the chart
-  chartGroup.call(toolTip);
-
   // Create element group for both circle and text
   var stateGroup = chartGroup.selectAll('g')
     .data(censusData)
@@ -184,9 +181,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
       console.log(`State: ${i} ${d.state}`);
       console.log(`translate(${xLinearScale(d[chosenXAxis])},${yLinearScale(d[chosenYAxis])})`);
       return `translate(${xLinearScale(d[chosenXAxis])},${yLinearScale(d[chosenYAxis])})`;
-    })
-    .on('mouseover', toolTip.show)
-    .on('mouseout', toolTip.hide);;
+    });
 
   // Create Circles
   stateGroup.append("circle")
@@ -246,10 +241,10 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   var smokesLabel = yLabelsGroup.append("text")
     .attr("x", 0)
     .attr("y", -40)
-    .attr("value", "age") // value to grab for event listener
+    .attr("value", "smokes") // value to grab for event listener
     .classed("inactive", true)
     .classed("aText", true)
-    .text("Smokes (Median)");
+    .text("Smokes (%)");
   
   var obesityLabel = yLabelsGroup.append("text")
     .attr("x", 0)
@@ -260,7 +255,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .text("Obese (Median)");
 
   // updateToolTip
-  var statesGroup = updateToolTip(chosenXAxis, chosenYAxis, stateGroup);
+  var stateGroup = updateToolTip(chosenXAxis, chosenYAxis, stateGroup);
 
   // x axis labels event listener
   xLabelsGroup.selectAll("text")
@@ -341,10 +336,10 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         yLinearScale = yScale(censusData, chosenYAxis);
 
         // updates x axis with transition
-        yAxis = renderYAxes(yLinearScale, yAxis);
+        yAxis = renderYAxis(yLinearScale, yAxis);
 
         // updates circles with new x values
-        stateGroup = renderCircles(stateGroup, yLinearScale, chosenYAxis);
+        stateGroup = renderCircles(stateGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
         // updates tooltips with new info
         stateGroup = updateToolTip(chosenXAxis, chosenYAxis, stateGroup);
@@ -369,7 +364,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             obesityLabel
               .classed("active", false)
               .classed("inactive", true);
-            povertyLabel
+            healthcareLabel
               .classed("active", false)
               .classed("inactive", true);
             break;
