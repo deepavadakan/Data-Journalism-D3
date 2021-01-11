@@ -107,6 +107,16 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
   console.log([censusData]);
 
+  var toolTip = d3.tip()
+    .attr("class", "d3-tip")
+    .offset([80, -60])
+    .html(function(d) {
+      return (`${d.state}<br>Poverty: ${d.poverty}%<br>Healthcare: ${d.healthcare}%`);
+    });
+
+  // Create tooltip in the chart
+  chartGroup.call(toolTip);
+
   // Create element group for both circle and text
   var stateGroup = chartGroup.selectAll('g')
     .data(censusData)
@@ -117,7 +127,9 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
       console.log(`State: ${i} ${d.state}`);
       console.log(`translate(${xLinearScale(d.poverty)},${yLinearScale(d.healthcare)})`);
       return `translate(${xLinearScale(d.poverty)},${yLinearScale(d.healthcare)})`;
-    });
+    })
+    .on('mouseover', toolTip.show)
+    .on('mouseout', toolTip.hide);;
 
   // Create Circles
   stateGroup.append("circle")
@@ -131,25 +143,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .style('font-size', '15px')
     .attr("class", "stateText")
     .text(d => d.abbr);
-
-    var toolTip = d3.tip()
-    .attr("class", "tooltip")
-    .offset([80, -60])
-    .html(function(d) {
-      return (`${d.rockband}<br>Hair length: ${d.hair_length}<br>Hits: ${d.num_hits}`);
-    });
-
-  // Create tooltip in the chart
-  chartGroup.call(toolTip);
-
-  // Create event listeners to display and hide the tooltip
-  circlesGroup.on("click", function(data) {
-    toolTip.show(data, this);
-  })
-    // onmouseout event
-    .on("mouseout", function(data, index) {
-      toolTip.hide(data);
-    });
 
   // Create axes labels
   chartGroup.append("text")
