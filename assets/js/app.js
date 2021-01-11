@@ -27,20 +27,18 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   // Parse Data/Cast as numbers
   censusData.forEach(function(data) {
     data.poverty = +data.poverty;
-    data.age = +data.age;
+    data.healthcare = +data.healthcare;
   });
-
-  console.log([censusData])
 
   // Create scale functions
   var xBuffer = 1;
   var yBuffer = 1;
   xLinearScale = d3.scaleLinear()
-    .domain([d3.min(censusData, data => data.poverty) - xBuffer, d3.max(censusData, data => data.poverty)])
+    .domain([d3.min(censusData, d => d.poverty) - xBuffer, d3.max(censusData, d => d.poverty) + xBuffer])
     .range([0, width]);
 
   yLinearScale = d3.scaleLinear()
-    .domain([d3.min(censusData, data => data.age) - yBuffer, d3.max(censusData, data => data.age)])
+    .domain([d3.min(censusData, d => d.healthcare) - yBuffer, d3.max(censusData, d => d.healthcare) + yBuffer])
     .range([height, 0]);
   
   // Create axis functions
@@ -55,12 +53,19 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   chartGroup.append("g")
     .call(leftAxis);
 
+  console.log([censusData]);
+
   // Create element group for both circle and text
   var circleTextGroup = chartGroup.selectAll('g')
     .data(censusData)
     .enter()
     .append("g")
-    .attr("transform", d => `translate(${xLinearScale(d.poverty)},${yLinearScale(d.age)})`);
+    //.attr("transform", d => `translate(${xLinearScale(d.poverty)},${yLinearScale(d.healthcare)})`);
+    .attr("transform", function(d, i) {
+      console.log(`State: ${i} ${d.state}`);
+      console.log(`translate(${xLinearScale(d.poverty)},${yLinearScale(d.healthcare)})`);
+      return `translate(${xLinearScale(d.poverty)},${yLinearScale(d.healthcare)})`;
+    });
 
   // Create Circles
   circleTextGroup.append("circle")
@@ -82,12 +87,12 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   .attr("x", 0 - (height / 2))
   .attr("dy", "1em")
   .attr("class", "aText")
-  .text("Poverty %");
+  .text("Lacks Healthcare (%)");
 
   chartGroup.append("text")
   .attr("transform", `translate(${width / 2}, ${height + margin.top})`)
   .attr("class", "aText")
-  .text("Age (Median)");
+  .text("In Poverty (%)");
 }).catch(function(error) {
   console.log(error);
 });
