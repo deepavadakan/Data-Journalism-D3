@@ -73,6 +73,39 @@ function renderCircles(stateGroup, newXScale, chosenXAxis) {
   return circlesGroup;
 }
 
+// function used for updating circles group with new tooltip
+function updateToolTip(chosenXAxis, chosenYAxis, stateGroup) {
+
+  var xLabel;
+  var yLabel;
+
+  if (chosenXAxis === "hair_length") {
+    label = "Hair Length:";
+  }
+  else {
+    label = "# of Albums:";
+  }
+
+  var toolTip = d3.tip()
+    .attr("class", "tooltip")
+    .offset([80, -60])
+    .html(function(d) {
+      return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
+    });
+
+  circlesGroup.call(toolTip);
+
+  circlesGroup.on("mouseover", function(data) {
+    toolTip.show(data);
+  })
+    // onmouseout event
+    .on("mouseout", function(data, index) {
+      toolTip.hide(data);
+    });
+
+  return circlesGroup;
+}
+
 d3.csv("assets/data/data.csv").then(function(censusData) {
   console.log(censusData)
 
@@ -107,9 +140,10 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
   console.log([censusData]);
 
+  // Setup the tool tip.  
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
-    .offset([80, -60])
+    .offset([45, -75])
     .html(function(d) {
       return (`${d.state}<br>Poverty: ${d.poverty}%<br>Healthcare: ${d.healthcare}%`);
     });
