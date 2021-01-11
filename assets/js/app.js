@@ -116,9 +116,6 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateGroup) {
     default:
       yLabel = "Healthcare";
   };
-  
-  console.log(`${chosenXAxis}, ${chosenYAxis}`);
-  console.log(`${xLabel}, ${yLabel}`);
 
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
