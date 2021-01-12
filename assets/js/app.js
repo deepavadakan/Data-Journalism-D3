@@ -237,27 +237,28 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   // Create group for three y-axis labels
   var yLabelsGroup = chartGroup.append("g")
   .attr("transform", "rotate(-90)")
-  .attr("y", 0 - margin.left)
-  .attr("x", 0 - (height / 2))
   .classed("aText", true);
   
   // healthcare on y-axis
   var healthcareLabel = yLabelsGroup.append("text")
-    .attr("dy", -30)
+    .attr("y", 0 - margin.left + 70)
+    .attr("x", 0 - (height / 2))
     .attr("value", "healthcare") // value to grab for event listener
     .classed("active", true)
     .text("Lacks Healthcare (%)");
 
   // amokes on y-axis
   var smokesLabel = yLabelsGroup.append("text")
-    .attr("dy", -50)
+    .attr("y", 0 - margin.left + 50)
+    .attr("x", 0 - (height / 2))
     .attr("value", "smokes") // value to grab for event listener
     .classed("inactive", true)
     .text("Smokes (%)");
   
   // obesity on y-axis
   var obesityLabel = yLabelsGroup.append("text")
-    .attr("dy", -70)
+    .attr("y", 0 - margin.left + 30)
+    .attr("x", 0 - (height / 2))
     .attr("value", "obesity") // value to grab for event listener
     .classed("inactive", true)
     .text("Obese (Median)");
