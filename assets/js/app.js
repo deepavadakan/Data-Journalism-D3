@@ -1,12 +1,12 @@
 // SVG wrapper width and height
-var svgWidth = 960;
-var svgHeight = 500;
+var svgWidth = 900;
+var svgHeight = 660;
 
 // set margins
 var margin = {
-    top: 20,
+    top: 60,
     right: 40,
-    bottom: 80,
+    bottom: 100,
     left: 100
 };
 
@@ -99,6 +99,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup) {
   var xType;
   var yType;
 
+  // update xLabel and xType based on chosenXAxis
   switch(chosenXAxis) {
     case "income":
       xLabel = "Median Income: $";
@@ -113,6 +114,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup) {
       xType = "%";
   };
 
+  // update yLabel and yType based on chosenYAxis
   switch(chosenYAxis) {
     case "obesity":
       yLabel = "Obesity: ";
@@ -127,6 +129,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup) {
       yType = "%";
   };
 
+  // Initialize tool tip
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
     .offset([45, -75])
@@ -135,11 +138,13 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup) {
       return (`${d.state}<br>${xLabel}${d[chosenXAxis]}${xType}<br>${yLabel}${d[chosenYAxis]}${yType}`);
     });
 
-    stateCirclesGroup.call(toolTip);
+  // Create tooltip in the chart
+  stateCirclesGroup.call(toolTip);
 
-    stateCirclesGroup
-      .on('mouseover', toolTip.show)
-      .on('mouseout', toolTip.hide);
+  // event listeners to display and hide the tooltip
+  stateCirclesGroup
+    .on('mouseover', toolTip.show)
+    .on('mouseout', toolTip.hide);
 
   return stateCirclesGroup;
 }
@@ -205,6 +210,15 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("class", "stateText")
     .text(d => d.abbr);
 
+  // Add Title to chart
+  svg.append("g")
+    .attr("transform", `translate(${svgWidth / 2}, 0)`)
+    .classed("titleText", true)
+    .attr("x", 0)
+    .attr("y", 20)
+    //.text(`${chosenXAxis} vs ${chosenYAxis}`);
+    .text("TITLE");
+
   // Create group for three x-axis labels
   var xLabelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${width / 2}, ${height + 20})`)
@@ -261,7 +275,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("x", 0 - (height / 2))
     .attr("value", "obesity") // value to grab for event listener
     .classed("inactive", true)
-    .text("Obese (Median)");
+    .text("Obese (%)");
 
   // updateToolTip
   var stateCirclesGroup = updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup);
@@ -285,7 +299,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         // updates x axis with transition
         xAxis = renderXAxis(xLinearScale, xAxis);
 
-        // updates circles with new x values
+        // updates circles with new x,y values
         stateCirclesGroup = renderCircles(stateCirclesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
         // updates tooltips with new info
@@ -329,25 +343,26 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
       }
     });
 
+  // y axis labels event listener
   yLabelsGroup.selectAll("text")
     .on("click", function() {
       // get value of selection
       var value = d3.select(this).attr("value");
       if (value !== chosenYAxis) {
 
-        // replaces chosenXAxis with value
+        // replaces chosenYAxis with value
         chosenYAxis = value;
 
         console.log(`chosenYAxis in YLabelsGroup event listener ${chosenYAxis}`);
 
         // functions here found above csv import
-        // updates x scale for new data
+        // updates y scale for new data
         yLinearScale = yScale(censusData, chosenYAxis);
 
-        // updates x axis with transition
+        // updates y axis with transition
         yAxis = renderYAxis(yLinearScale, yAxis);
 
-        // updates circles with new x values
+        // updates circles with new x,y values
         stateCirclesGroup = renderCircles(stateCirclesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
         // updates tooltips with new info
