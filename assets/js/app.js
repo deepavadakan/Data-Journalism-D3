@@ -34,7 +34,7 @@ function xScale(censusData, chosenXAxis) {
   // create scale
   var xLinearScale = d3.scaleLinear()
     .domain([d3.min(censusData, d => d[chosenXAxis]) * .95,
-      d3.max(censusData, d => d[chosenXAxis] * 1.1)
+      d3.max(censusData, d => d[chosenXAxis] * 1.05)
     ])
     .range([0, width]);
 
@@ -47,7 +47,7 @@ function yScale(censusData, chosenYAxis) {
   yLinearScale = d3.scaleLinear()
   var yLinearScale = d3.scaleLinear()
     .domain([d3.min(censusData, d => d[chosenYAxis]) * .8,
-      d3.max(censusData, d => d[chosenYAxis] * 1.1)
+      d3.max(censusData, d => d[chosenYAxis] * 1.05)
     ])
     .range([height, 0]);
 
@@ -178,16 +178,16 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .classed("y-axis", true)
     .call(leftAxis);
 
-  console.log(`Formatted census Data ${[censusData]}`);
+  console.log([censusData]);
 
   // Create element group for both circle and text
-  var stateGroup = chartGroup.selectAll('g')
+  var stateGroup = chartGroup.selectAll(null)
     .data(censusData)
     .enter()
     .append("g")
     //.attr("transform", d => `translate(${xLinearScale(d[chosenXAxis])},${yLinearScale(d[chosenYAxis])})`);
     .attr("transform", function(d, i) {
-      //console.log(`State: ${i} ${d.state}`);
+      console.log(`State: ${i} ${d.state}`);
       //console.log(`translate(${xLinearScale(d[chosenXAxis])},${yLinearScale(d[chosenYAxis])})`);
       return `translate(${xLinearScale(d[chosenXAxis])},${yLinearScale(d[chosenYAxis])})`;
     });
@@ -195,13 +195,13 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   // Create Circles
   stateGroup.append("circle")
     .classed("stateCircle", true)
-    .attr("r", "15");
+    .attr("r", "10");
 
   // Add State abbreviations to circles
   stateGroup.append("text")
     .attr('text-anchor', 'middle')
     .attr('alignment-baseline', 'middle')
-    .style('font-size', '15px')
+    .style('font-size', '10px')
     .attr("class", "stateText")
     .text(d => d.abbr);
 
