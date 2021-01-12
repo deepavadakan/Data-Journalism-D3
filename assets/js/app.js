@@ -78,9 +78,9 @@ function renderYAxis(newYScale, yAxis) {
 }
 
 // function used for updating state group circles with a transition to new circles
-function renderCircles(stateGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
+function renderCircles(stateCirclesGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
 
-  stateGroup.transition()
+  stateCirclesGroup.transition()
     .duration(1000)
     .attr("transform", function(d, i) {
       //console.log(`State: ${i} ${d.state}`);
@@ -88,11 +88,11 @@ function renderCircles(stateGroup, newXScale, newYScale, chosenXAxis, chosenYAxi
       return `translate(${newXScale(d[chosenXAxis])},${newYScale(d[chosenYAxis])})`;
     })
 
-  return stateGroup;
+  return stateCirclesGroup;
 }
 
 // function used for updating state group circles  with new tooltip
-function updateToolTip(chosenXAxis, chosenYAxis, stateGroup) {
+function updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup) {
 
   var xLabel;
   var yLabel;
@@ -101,11 +101,11 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateGroup) {
 
   switch(chosenXAxis) {
     case "income":
-      xLabel = "Income: $";
+      xLabel = "Median Income: $";
       xType = "";
       break;
     case "age":
-      xLabel = "Age: ";
+      xLabel = "Median Age: ";
       xType = "";
       break;
     default:
@@ -135,13 +135,13 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateGroup) {
       return (`${d.state}<br>${xLabel}${d[chosenXAxis]}${xType}<br>${yLabel}${d[chosenYAxis]}${yType}`);
     });
 
-    stateGroup.call(toolTip);
+    stateCirclesGroup.call(toolTip);
 
-    stateGroup
+    stateCirclesGroup
       .on('mouseover', toolTip.show)
       .on('mouseout', toolTip.hide);
 
-  return stateGroup;
+  return stateCirclesGroup;
 }
 
 // Retrieve data from the CSV file and execute everything below
@@ -181,7 +181,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   console.log([censusData]);
 
   // Create element group for both circle and text
-  var stateGroup = chartGroup.selectAll(null)
+  var stateCirclesGroup = chartGroup.selectAll(null)
     .data(censusData)
     .enter()
     .append("g")
@@ -193,12 +193,12 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     });
 
   // Create Circles
-  stateGroup.append("circle")
+  stateCirclesGroup.append("circle")
     .classed("stateCircle", true)
     .attr("r", "10");
 
   // Add State abbreviations to circles
-  stateGroup.append("text")
+  stateCirclesGroup.append("text")
     .attr('text-anchor', 'middle')
     .attr('alignment-baseline', 'middle')
     .style('font-size', '10px')
@@ -264,7 +264,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .text("Obese (Median)");
 
   // updateToolTip
-  var stateGroup = updateToolTip(chosenXAxis, chosenYAxis, stateGroup);
+  var stateCirclesGroup = updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup);
 
   // x axis labels event listener
   xLabelsGroup.selectAll("text")
@@ -286,10 +286,10 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         xAxis = renderXAxis(xLinearScale, xAxis);
 
         // updates circles with new x values
-        stateGroup = renderCircles(stateGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
+        stateCirclesGroup = renderCircles(stateCirclesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
         // updates tooltips with new info
-        stateGroup = updateToolTip(chosenXAxis, chosenYAxis, stateGroup);
+        stateCirclesGroup = updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup);
 
         // changes classes to change bold text
         switch(chosenXAxis) {
@@ -348,10 +348,10 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         yAxis = renderYAxis(yLinearScale, yAxis);
 
         // updates circles with new x values
-        stateGroup = renderCircles(stateGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
+        stateCirclesGroup = renderCircles(stateCirclesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
         // updates tooltips with new info
-        stateGroup = updateToolTip(chosenXAxis, chosenYAxis, stateGroup);
+        stateCirclesGroup = updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup);
 
         // changes classes to change bold text
         switch(chosenYAxis) {
