@@ -31,20 +31,21 @@ var yLabel = "Healthcare";
 function xScale(censusData, chosenXAxis) {
   // create scale
   var xLinearScale = d3.scaleLinear()
-    .domain([d3.min(censusData, d => d[chosenXAxis]),
-      d3.max(censusData, d => d[chosenXAxis])
+    .domain([d3.min(censusData, d => d[chosenXAxis]) * .95,
+      d3.max(censusData, d => d[chosenXAxis] * 1.1)
     ])
     .range([0, width]);
 
   return xLinearScale;
 }
 
+// function used for updating y-scale var upon click on axis label
 function yScale(censusData, chosenYAxis) {
   // create scale
   yLinearScale = d3.scaleLinear()
   var yLinearScale = d3.scaleLinear()
-    .domain([d3.min(censusData, d => d[chosenYAxis]),
-      d3.max(censusData, d => d[chosenYAxis])
+    .domain([d3.min(censusData, d => d[chosenYAxis]) * .8,
+      d3.max(censusData, d => d[chosenYAxis] * 1.1)
     ])
     .range([height, 0]);
 
