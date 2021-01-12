@@ -178,7 +178,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .classed("y-axis", true)
     .call(leftAxis);
 
-    console.log(`Formatted census Data ${[censusData]}`);
+  console.log(`Formatted census Data ${[censusData]}`);
 
   // Create element group for both circle and text
   var stateGroup = chartGroup.selectAll('g')
