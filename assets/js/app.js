@@ -129,10 +129,12 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup) {
       yType = "%";
   };
 
+  var labelSize = Math.max(xLabel.length, yLabel.length);
+  console.log(`Max: ${labelSize}`);
   // Initialize tool tip
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
-    .offset([45, -75])
+    .offset([45, -(labelSize * 6)])
     .html("")
     .html(function(d) {
       return (`<strong>${d.state}</strong><br>${xLabel}${d[chosenXAxis]}${xType}<br>${yLabel}${d[chosenYAxis]}${yType}`);
@@ -215,11 +217,11 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .text(d => d.abbr);
 
   // Add Title to chart
-  var titleText = chartGroup.append("g");
+  var titleText = chartGroup.append("g")
+    .classed("tText", true);
   titleText.append("text")
     .attr("x", (width / 2))
     .attr("y", 0 - (margin.top / 2))
-    .classed("titleText", true)
     .text(`${chosenXAxis} vs ${chosenYAxis}`);
 
   // Create group for three x-axis labels
@@ -346,8 +348,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
           .append("text")
           .attr("x", (width / 2))
           .attr("y", 0 - (margin.top / 2))
-          .classed("titleText", true)
-          .text(`${chosenXAxis.charAt(0).toUpperCase()}${chosenXAxis.substring(1)} vs ${chosenYAxis.charAt(0).toUpperCase()}${chosenYAxis.substring(1)}`);
+          .text(`${chosenXAxis} vs ${chosenYAxis}`);
       }
     });
 
@@ -414,8 +415,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
           .append("text")
           .attr("x", (width / 2))
           .attr("y", 0 - (margin.top / 2))
-          .classed("titleText", true)
-          .text(`${chosenXAxis.charAt(0).toUpperCase()}${chosenXAxis.substring(1)} vs ${chosenYAxis.charAt(0).toUpperCase()}${chosenYAxis.substring(1)}`);
+          .text(`${chosenXAxis} vs ${chosenYAxis}`);
       }
     });
   

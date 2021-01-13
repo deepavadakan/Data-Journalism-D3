@@ -4,13 +4,14 @@
   text-anchor: middle;
 }
 
-.titleText {
+.tText {
   font-family: sans-serif;
   font-size: 24px;
   color: rgb(28, 11, 121);
   text-anchor: middle;
   text-decoration: underline;
   text-transform: capitalize;
+  background: #89bdd3;
 }
 
 .active {
@@ -59,7 +60,6 @@
   color: #fff;
   text-align: center;
   text-transform: capitalize;
-  /*background: rgba(0, 0, 0, 0.8);*/
   background: #89bdd3;
   border-radius: 4px;
 }
