@@ -1,5 +1,5 @@
 // SVG wrapper width and height
-var svgWidth = 900;
+var svgWidth = 1100;
 var svgHeight = 660;
 
 // set margins
@@ -135,7 +135,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup) {
     .offset([45, -75])
     .html("")
     .html(function(d) {
-      return (`${d.state}<br>${xLabel}${d[chosenXAxis]}${xType}<br>${yLabel}${d[chosenYAxis]}${yType}`);
+      return (`<strong>${d.state}</strong><br>${xLabel}${d[chosenXAxis]}${xType}<br>${yLabel}${d[chosenYAxis]}${yType}`);
     });
 
   // Create tooltip in the chart
@@ -143,7 +143,15 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup) {
 
   // event listeners to display and hide the tooltip
   stateCirclesGroup
-    .on('mouseover', toolTip.show)
+    .on('mouseover', function(d){
+      console.log("toolTip: " +toolTip);
+      // raise the state circle to the front on mouseover
+      console.log("This: " +this);
+      d3.select(this).raise(); 
+      //toolTip.show(d);
+      toolTip.show(d);
+    })
+    //.on('mouseover', toolTip.show)
     .on('mouseout', toolTip.hide);
 
   return stateCirclesGroup;
@@ -200,24 +208,23 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   // Create Circles
   stateCirclesGroup.append("circle")
     .classed("stateCircle", true)
-    .attr("r", "10");
+    .attr("r", "12");
 
   // Add State abbreviations to circles
   stateCirclesGroup.append("text")
     .attr('text-anchor', 'middle')
     .attr('alignment-baseline', 'middle')
-    .style('font-size', '10px')
+    .style('font-size', '12px')
     .attr("class", "stateText")
     .text(d => d.abbr);
 
   // Add Title to chart
-  svg.append("g")
-    .attr("transform", `translate(${svgWidth / 2}, 0)`)
+  var titleText = chartGroup.append("g");
+  titleText.append("text")
+    .attr("x", (width / 2))
+    .attr("y", 0 - (margin.top / 2))
     .classed("titleText", true)
-    .attr("x", 0)
-    .attr("y", 20)
-    //.text(`${chosenXAxis} vs ${chosenYAxis}`);
-    .text("TITLE");
+    .text(`${chosenXAxis} vs ${chosenYAxis}`);
 
   // Create group for three x-axis labels
   var xLabelsGroup = chartGroup.append("g")
@@ -290,8 +297,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         // replaces chosenXAxis with value
         chosenXAxis = value;
 
-        console.log(`chosenXAxis in xLabelsGroup event listener ${chosenXAxis}`);
-
         // functions here found above csv import
         // updates x scale for new data
         xLinearScale = xScale(censusData, chosenXAxis);
@@ -340,6 +345,13 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
               .classed("active", false)
               .classed("inactive", true);
         };
+        // Add Title to chart
+        titleText.html("")
+          .append("text")
+          .attr("x", (width / 2))
+          .attr("y", 0 - (margin.top / 2))
+          .classed("titleText", true)
+          .text(`${chosenXAxis.charAt(0).toUpperCase()}${chosenXAxis.substring(1)} vs ${chosenYAxis.charAt(0).toUpperCase()}${chosenYAxis.substring(1)}`);
       }
     });
 
@@ -352,8 +364,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
         // replaces chosenYAxis with value
         chosenYAxis = value;
-
-        console.log(`chosenYAxis in YLabelsGroup event listener ${chosenYAxis}`);
 
         // functions here found above csv import
         // updates y scale for new data
@@ -403,6 +413,13 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
               .classed("active", false)
               .classed("inactive", true);
         };
+        // Add Title to chart
+        titleText.html("")
+          .append("text")
+          .attr("x", (width / 2))
+          .attr("y", 0 - (margin.top / 2))
+          .classed("titleText", true)
+          .text(`${chosenXAxis.charAt(0).toUpperCase()}${chosenXAxis.substring(1)} vs ${chosenYAxis.charAt(0).toUpperCase()}${chosenYAxis.substring(1)}`);
       }
     });
   
