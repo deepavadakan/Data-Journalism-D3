@@ -144,14 +144,10 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup) {
   // event listeners to display and hide the tooltip
   stateCirclesGroup
     .on('mouseover', function(d){
-      console.log("toolTip: " +toolTip);
       // raise the state circle to the front on mouseover
-      console.log("This: " +this);
       d3.select(this).raise(); 
-      //toolTip.show(d);
-      toolTip.show(d);
+      toolTip.show(d, this);
     })
-    //.on('mouseover', toolTip.show)
     .on('mouseout', toolTip.hide);
 
   return stateCirclesGroup;
@@ -208,13 +204,13 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   // Create Circles
   stateCirclesGroup.append("circle")
     .classed("stateCircle", true)
-    .attr("r", "12");
+    .attr("r", "15");
 
   // Add State abbreviations to circles
   stateCirclesGroup.append("text")
     .attr('text-anchor', 'middle')
     .attr('alignment-baseline', 'middle')
-    .style('font-size', '12px')
+    .style('font-size', '15px')
     .attr("class", "stateText")
     .text(d => d.abbr);
 
