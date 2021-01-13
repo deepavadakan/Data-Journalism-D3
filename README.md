@@ -1,6 +1,6 @@
 # D3-Challenge
 
->  Build an interactive scatter plot to explore health risks facing particular demographics.
+>  Build an interactive scatter plot to explore health risks facing particular demographics using D3 techniques.
 
 
 ## Table of contents
