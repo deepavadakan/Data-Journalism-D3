@@ -11,13 +11,13 @@
 
 ## Tasks
 
-1.  Using the D3 techniques create a scatter plot between health risks (obesity, smokes, lacks healthcare a nd poverty, age and household income)
+1.  Using the D3 techniques create a scatter plot between health risks (obesity, smokes, lacks healthcare and poverty, age and household income)
 
 2.  Each state is represented with circle elements that include state abbreviations in the circles.
 
 3.  Add 3 risk factors to each axis which when clicked will display appropriate data.
 
-4.  Tooltips added to circles and which display the data that has been selected.
+4.  Tooltips added to circles which display the data that has been selected.
 
 ![Scatter Plot](assets/images/d3.png)
 
