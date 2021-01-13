@@ -129,12 +129,13 @@ function updateToolTip(chosenXAxis, chosenYAxis, stateCirclesGroup) {
       yType = "%";
   };
 
+  // find the max size for label
   var labelSize = Math.max(xLabel.length, yLabel.length);
-  console.log(`Max: ${labelSize}`);
+  
   // Initialize tool tip
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
-    .offset([45, -(labelSize * 6)])
+    .offset([45, -(labelSize * 6)]) // use label size to set the offset at the right position
     .html("")
     .html(function(d) {
       return (`<strong>${d.state}</strong><br>${xLabel}${d[chosenXAxis]}${xType}<br>${yLabel}${d[chosenYAxis]}${yType}`);
