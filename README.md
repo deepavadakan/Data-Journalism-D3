@@ -21,7 +21,7 @@
 
 4.  Tooltips added to circles which display the data that has been selected.
 
-![Scatter Plot](assets/images/d3.gif)
+![Scatter Plot](assets/images/D3.gif)
 
 
 ## Analysis
