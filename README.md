@@ -6,6 +6,8 @@
 ## Table of contents
 * [Tasks](#Tasks)
 * [Analysis](#Analysis)
+* [Data Sources](#data)
+* [Technologies](#technologies)
 * [Contact](#Contact)
 
 
@@ -19,7 +21,7 @@
 
 4.  Tooltips added to circles which display the data that has been selected.
 
-![Scatter Plot](assets/images/d3.png)
+![Scatter Plot](assets/images/d3.gif)
 
 
 ## Analysis
@@ -34,6 +36,14 @@ The chart shows a slight positive correlation between Age and the percentage of 
 #### Household Income vs Health Risks
 States with a lower median household income have more health risks. The percentage of obese people and smokers is much higher in states with lower income. This is probably due to the fact that the percentage of people with healthcare is also lower in those states.
 
+## Technologies
+* Javascript
+* HTML/ CSS
+* Bootstrap
+* D3
+
+## Data
+[2014 ACS 1-year estimates from the US Census Bureau](assets/data/data.csv)
 
 ## Contact
 Created by [@deepavadakan](https://github.com/)
