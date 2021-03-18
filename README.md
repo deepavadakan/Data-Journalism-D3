@@ -1,4 +1,4 @@
-# D3-Challenge
+# Data Journalism Visualization using D3
 
 >  Build an interactive scatter plot to explore health risks facing particular demographics using D3 techniques.
 
